@@ -1,0 +1,13 @@
+services:
+  api7-ee-sit-gateway:
+    image: api7/api7-ee-3-gateway:${API7_GATEWAY_TAG}
+    hostname: api7-ee-sit-gateway
+    container_name: api7-ee-sit-gateway
+    restart: always
+    env_file:
+      - api7-ee-sit-gateway.env
+    ports:
+      - "19080:9080"
+      - "19443:9443"
+    volumes:
+      - ./gateway_conf/config-default.yaml:/usr/local/apisix/conf/config-default.yaml:ro

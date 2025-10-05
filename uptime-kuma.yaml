@@ -1,0 +1,14 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    restart: always
+    volumes:
+      - ./kuma_data:/app/data
+    ports:
+      - 3001:3001
+    healthcheck:
+      test: ["CMD", "extra/healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 3

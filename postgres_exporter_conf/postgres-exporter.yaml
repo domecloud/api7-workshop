@@ -1,0 +1,9 @@
+auth_modules:
+  api7ee: # Set this to any name you want
+    type: userpass
+    userpass:
+      username: api7ee
+      password: api7ee
+    options:
+      # options become key=value parameters of the DSN
+      sslmode: disable

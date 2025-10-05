@@ -1,0 +1,18 @@
+services:
+  postgresql:
+    image: postgres:${POSTGRES_VERSION:-latest}
+    hostname: api7-database
+    container_name: api7-database
+    environment:
+      - PGDATA=/var/lib/postgresql/docker
+      - POSTGRES_USER=${POSTGRES_USER:-api7ee}
+      - POSTGRES_DB=${POSTGRES_DB:-api7ee}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-api7ee}
+    volumes:
+      - ./pg_data:/var/lib/postgresql/docker
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

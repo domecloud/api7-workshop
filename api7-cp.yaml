@@ -1,0 +1,44 @@
+services:
+  api7-ee-dashboard:
+    image: api7/api7-ee-3-integrated:${API7_DASHBOARD_TAG:-v3.8.14}
+    hostname: dashboard
+    container_name: dashboard
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./dashboard_conf/conf.yaml:/usr/local/api7/conf/conf.yaml:ro
+    command:
+      - sh
+      - -c
+      - node server.js & /usr/local/api7/api7-ee-dashboard -c /usr/local/api7/conf/conf.yaml
+    ports:
+      - "7080:7080"
+      - "7443:7443"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "127.0.0.1", "7443"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  api7-ee-dp-manager:
+    image: api7/api7-ee-dp-manager:${API7_DP_MANAGER_TAG:-v3.8.14}
+    hostname: dp-manager
+    container_name: dp-manager
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./dp_manager_conf/conf.yaml:/usr/local/api7/conf/conf.yaml:ro
+    command:
+      - /usr/local/api7/api7-ee-dp-manager
+      - -c
+      - /usr/local/api7/conf/conf.yaml
+    ports:
+      - "7900:7900"
+      - "7943:7943"
+    healthcheck:
+      test: ["CMD", "perl", "-MIO::Socket::INET", "-e", "exit !IO::Socket::INET->new('127.0.0.1:7943')"]
+      interval: 10s
+      timeout: 5s
+      retries: 12

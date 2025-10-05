@@ -1,0 +1,30 @@
+services:
+  api1:
+    image: kennethreitz/httpbin
+    restart: always
+    container_name: api1
+    healthcheck:
+      test: ["CMD", "/usr/bin/python3", "-c", "import socket; socket.create_connection(('127.0.0.1', 80), 5)"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+
+  api2:
+    image: kennethreitz/httpbin
+    restart: always
+    container_name: api2
+    healthcheck:
+      test: ["CMD", "/usr/bin/python3", "-c", "import socket; socket.create_connection(('127.0.0.1', 80), 5)"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+
+  api3:
+    image: kennethreitz/httpbin
+    restart: always
+    container_name: api3
+    healthcheck:
+      test: ["CMD", "/usr/bin/python3", "-c", "import socket; socket.create_connection(('127.0.0.1', 80), 5)"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
