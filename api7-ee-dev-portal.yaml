@@ -1,0 +1,20 @@
+services:
+  api7-ee-developer-portal:
+    image: api7/api7-ee-developer-portal:${API7_DEVELOPER_PORTAL_TAG}
+    hostname: dev-portal
+    container_name: dev-portal
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./dev_portal_conf/conf.yaml:/usr/local/api7/conf/conf.yaml:ro
+    command:
+      - /usr/local/api7/api7-ee-developer-portal
+      - -c
+      - /usr/local/api7/conf/conf.yaml
+    ports:
+      - "4321:4321"
+      - "4322:4322"
+    # depends_on:
+    #   api7-ee-dashboard:
+    #     condition: service_healthy
