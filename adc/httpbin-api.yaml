@@ -1,0 +1,66 @@
+services:
+  - name: httpin service
+    description: "The httpbin service proxy service"
+    labels:
+      app: httpbin
+    routes:
+      - name: Generate UUID
+        methods:
+          - GET
+        uris:
+          - /uuid
+        plugins:
+          limit-req:
+            _meta:
+              disable: false
+            rate: 2
+            burst: 0
+            key: remote_addr
+            key_type: var
+            rejected_code: 429
+            nodelay: true
+            rejected_msg: Too Many Requests
+            rejected_headers:
+              Content-Type: application/json
+            
+      - name: Anything
+        methods:
+          - GET
+        uris:
+          - /anything
+        plugins:
+          key-auth:
+            _meta:
+              disable: false
+      - name: Rate Limited IP
+        methods:
+          - GET
+        uris:
+          - /ip
+        plugins:
+          limit-count:
+            _meta:
+              disable: false
+            count: 2
+            time_window: 10
+            rejected_code: 429
+            policy: local
+    upstream:
+      name: httpbin
+      scheme: http
+      type: roundrobin
+      nodes:
+        - host: api1
+          port: 80
+          weight: 100
+          priority: 0
+        - host: api2
+          port: 80
+          weight: 10
+          priority: 0
+        - host: api3
+          port: 80
+          weight: 1
+          priority: 0
+      retry_timeout: 0
+      pass_host: node

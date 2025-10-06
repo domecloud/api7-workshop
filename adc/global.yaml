@@ -1,0 +1,47 @@
+global_rules:
+  loki-logger:
+    batch_max_size: 1000
+    buffer_duration: 60
+    endpoint_addrs:
+      - http://loki:3100
+    endpoint_uri: /loki/api/v1/push
+    inactive_timeout: 5
+    include_req_body: false
+    include_resp_body: false
+    keepalive: true
+    keepalive_pool: 5
+    keepalive_timeout: 60000
+    log_labels:
+      host: $host
+      job: api7
+      service_name: $service_name
+    max_retry_count: 0
+    name: loki logger
+    retry_delay: 1
+    ssl_verify: false
+    tenant_id: fake
+    timeout: 3000
+  opentelemetry:
+    sampler:
+      name: always_on
+      options:
+        fraction: 1
+        root:
+          name: always_on
+          options:
+            fraction: 1
+  prometheus:
+    prefer_name: true
+  zipkin:
+    endpoint: http://tempo:9411/api/v2/spans
+    sample_ratio: 1
+    service_name: APISIX
+    span_version: 2
+plugin_metadata:
+  opentelemetry:
+    batch_span_processor: {}
+    collector:
+      address: tempo:4318
+      request_timeout: 3
+    set_ngx_var: true
+    trace_id_source: random
