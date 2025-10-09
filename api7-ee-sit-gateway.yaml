@@ -11,3 +11,9 @@ services:
       - "19443:9443"
     volumes:
       - ./gateway_conf/config-default.yaml:/usr/local/apisix/conf/config-default.yaml:ro
+    healthcheck:
+      # Check if APISIX is running by querying the status API
+      test: ["CMD", "curl", "--fail", "http://localhost:7085/status"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
